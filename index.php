@@ -45,6 +45,7 @@
         <h1>ゲーム一覧</h1>
         <ul>
             <li>
+                <a href="./tictactoe.php">3木並べ</a>
                 <a href="./janken.php">じゃんけんゲーム</a>
             </li>
         </ul>
