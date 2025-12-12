@@ -38,20 +38,59 @@ if (isset(JANKEN_HANDS[$user_hand])) {
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>PHP じゃんけんゲーム</title>
     <style>
-        body { font-family: 'Arial', sans-serif; text-align: center; padding-top: 50px; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .result-box { margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px; }
-        .hand-button { padding: 10px 20px; font-size: 16px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; }
-        .rock { background-color: #ffcccc; }
-        .scissors { background-color: #ccffcc; }
-        .paper { background-color: #ccccff; }
-        strong { color: red; }
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .result-box {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .hand-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .rock {
+            background-color: #ffcccc;
+        }
+
+        .scissors {
+            background-color: #ccffcc;
+        }
+
+        .paper {
+            background-color: #ccccff;
+        }
+
+        strong {
+            color: red;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>✊ じゃんけんゲーム ✋</h1>
@@ -69,11 +108,13 @@ if (isset(JANKEN_HANDS[$user_hand])) {
 
         <form method="GET" action="janken.php">
             <?php foreach (JANKEN_HANDS as $hand_key => $hand_text): ?>
-                <button type="submit" name="hand" value="<?php echo $hand_key; ?>" class="hand-button <?php echo $hand_key; ?>">
+                <button type="submit" name="hand" value="<?php echo $hand_key; ?>"
+                    class="hand-button <?php echo $hand_key; ?>">
                     <?php echo $hand_text; ?>
                 </button>
             <?php endforeach; ?>
         </form>
     </div>
 </body>
+
 </html>
