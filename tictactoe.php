@@ -41,7 +41,8 @@ $message = &$_SESSION['message'];
  * 勝者を確認する
  * @return string|null 勝者のシンボル ('X' or 'O') または NULL
  */
-function check_winner($board) {
+function check_winner($board)
+{
     // 勝利条件のチェック（行、列、対角線）
     $lines = [];
 
@@ -73,7 +74,8 @@ function check_winner($board) {
  * 盤面が埋まっているか確認する
  * @return bool 埋まっていれば true
  */
-function is_board_full($board) {
+function is_board_full($board)
+{
     foreach ($board as $row) {
         if (in_array(CELL_EMPTY, $row, true)) {
             return false;
@@ -85,7 +87,8 @@ function is_board_full($board) {
 /**
  * コンピュータ (O) の手番
  */
-function computer_move(&$board, &$current_player, &$message) {
+function computer_move(&$board, &$current_player, &$message)
+{
     // シンプルなランダム配置ロジック
     $empty_cells = [];
     for ($r = 0; $r < BOARD_SIZE; $r++) {
@@ -110,8 +113,8 @@ function computer_move(&$board, &$current_player, &$message) {
 
 if (!$game_over && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['move'])) {
     $parts = explode('_', $_POST['move']);
-    $row = (int)$parts[0];
-    $col = (int)$parts[1];
+    $row = (int) $parts[0];
+    $col = (int) $parts[1];
 
     if ($board[$row][$col] === CELL_EMPTY && $current_player === PLAYER_X) {
         // 1. ユーザー (X) の手番処理
@@ -130,7 +133,7 @@ if (!$game_over && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['move']
             // 3. コンピュータ (O) の手番に切り替え
             $current_player = PLAYER_O;
             $message = 'コンピュータが考えています...';
-            
+
             // コンピュータの手番を実行（ここでは即時実行）
             computer_move($board, $current_player, $message);
 
@@ -157,38 +160,114 @@ if (!$game_over && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['move']
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>PHP 三目並べ (Tic-Tac-Toe)</title>
     <style>
-        body { font-family: 'Arial', sans-serif; text-align: center; padding-top: 30px; background-color: #f4f4f4; }
-        .container { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { color: #333; }
-        .message { padding: 10px; margin: 20px 0; font-weight: bold; border-radius: 5px; background-color: #e9ecef; }
-        .board { display: grid; grid-template-columns: repeat(3, 1fr); width: 300px; height: 300px; margin: 20px auto; border: 3px solid #333; }
-        .cell-button { 
-            width: 100%; 
-            height: 100%; 
-            border: 1px solid #333; 
-            font-size: 48px; 
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding-top: 30px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 20px 0;
             font-weight: bold;
-            cursor: pointer; 
+            border-radius: 5px;
+            background-color: #e9ecef;
+        }
+
+        /* 修正箇所：盤面全体とセルのスタイルを調整 */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 300px;
+            /* サイズ固定 */
+            height: 300px;
+            /* サイズ固定 */
+            margin: 20px auto;
+            /* 💡 盤面全体のボーダーは削除し、セルに持たせる */
+            border: none;
+        }
+
+        .cell-button {
+            width: 100%;
+            height: 100%;
+            /* 💡 各セルのボーダーを設定 */
+            border: 2px solid #333;
+
+            /* 💡 がたつき修正の核心：隣接するセルのボーダーが重なって太くならないように、マージンで相殺 */
+            margin-top: -1px;
+            margin-left: -1px;
+
+            font-size: 48px;
+            font-weight: bold;
+            cursor: pointer;
             background: #fff;
             transition: background-color 0.2s;
             outline: none;
+
+            /* テキストを完全に中央に配置 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            /* ボタンのデフォルトパディングを削除 */
         }
-        .cell-button:hover:not([disabled]) { background-color: #eee; }
-        .cell-button[disabled] { cursor: default; }
-        .X-mark { color: #d9534f; }
-        .O-mark { color: #5cb85c; }
-        .reset-button { padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
-        .reset-button:hover { background-color: #0056b3; }
+
+        .cell-button:hover:not([disabled]) {
+            background-color: #eee;
+        }
+
+        .cell-button[disabled] {
+            cursor: default;
+        }
+
+        .X-mark {
+            color: #d9534f;
+        }
+
+        .O-mark {
+            color: #5cb85c;
+        }
+
+        .reset-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .reset-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>⭕❌ 三目並べ ⭕❌</h1>
-        
+
         <div class="message">
             <?php echo $message; ?>
         </div>
@@ -197,18 +276,13 @@ if (!$game_over && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['move']
             <form method="POST" action="tictactoe.php">
                 <?php for ($r = 0; $r < BOARD_SIZE; $r++): ?>
                     <?php for ($c = 0; $c < BOARD_SIZE; $c++): ?>
-                        <?php 
-                            $value = $board[$r][$c];
-                            $disabled = ($value !== CELL_EMPTY || $game_over) ? 'disabled' : '';
-                            $class = ($value === PLAYER_X) ? 'X-mark' : (($value === PLAYER_O) ? 'O-mark' : '');
+                        <?php
+                        $value = $board[$r][$c];
+                        $disabled = ($value !== CELL_EMPTY || $game_over) ? 'disabled' : '';
+                        $class = ($value === PLAYER_X) ? 'X-mark' : (($value === PLAYER_O) ? 'O-mark' : '');
                         ?>
-                        <button 
-                            type="submit" 
-                            name="move" 
-                            value="<?php echo "{$r}_{$c}"; ?>"
-                            class="cell-button <?php echo $class; ?>"
-                            <?php echo $disabled; ?>
-                        >
+                        <button type="submit" name="move" value="<?php echo "{$r}_{$c}"; ?>"
+                            class="cell-button <?php echo $class; ?>" <?php echo $disabled; ?>>
                             <?php echo $value; ?>
                         </button>
                     <?php endfor; ?>
@@ -221,4 +295,5 @@ if (!$game_over && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['move']
         <a href="./index.php">ゲーム一覧に戻る</a>
     </div>
 </body>
+
 </html>
